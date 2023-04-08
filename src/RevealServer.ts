@@ -9,6 +9,7 @@ import markdownit from './Markdown-it'
 import { exportHTML, IExportOptions } from './ExportHTML'
 import { Disposable } from './dispose'
 import { RevealContext } from './RevealContext'
+import { privateEncrypt } from 'crypto'
 
 /** Http server to serve reveal presentation */
 export class RevealServer extends Disposable {
@@ -165,12 +166,16 @@ export class RevealServer extends Disposable {
             chunks.push(chunk);
           }
           try {
-            let body = "";
+            let body : any;
+            console.log(`${typeof chunks[0]}`)
             if (chunks.length > 0 && typeof chunks[0] === 'string') {
+              console.log(`string, chunks.length = ${chunks.length}, ${req.originalUrl}`)
               body = body.concat(...(chunks as string[]));
             }
             else {
-              body = Buffer.concat(chunks).toString('utf8');
+              console.log(`toString, chunks.length = ${chunks.length}, ${req.originalUrl}`)
+              // body = Buffer.concat(chunks).toString('utf8');
+              body = Buffer.concat(chunks);
             }
 
 
